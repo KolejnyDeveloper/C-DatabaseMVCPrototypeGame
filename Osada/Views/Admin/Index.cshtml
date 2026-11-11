@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Panel administratora";
+}
+
+<div class="container mt-4">
+    <h1>Panel administratora</h1>
+
+    <p class="text-muted">
+        Zarządzanie graczami i osadami
+    </p>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h6>Wszyscy użytkownicy</h6>
+                    <h2>@ViewBag.UserCount</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h6>Aktywni użytkownicy</h6>
+                    <h2>@ViewBag.ActiveUserCount</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h6>Wioski w grze</h6>
+                    <h2>@ViewBag.VillageCount</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h6>Ataki</h6>
+                    <h2>@ViewBag.AttackCount</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h6>Transakcje surowców</h6>
+                    <h2>@ViewBag.TransactionCount</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

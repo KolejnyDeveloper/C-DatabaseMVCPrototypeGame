@@ -1,14 +1,29 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Osada.Controllers;
+using Osada.Data;
 using Osada.Models;
 using System.Diagnostics;
+
 
 namespace Osada.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+
+        private readonly ApplicationDbContext _context;
+
+        public HomeController(ApplicationDbContext context)
         {
-            return View();
+            _context = context;
+        }
+        public async Task<IActionResult> Index()
+        {
+            var users = await _context.Users
+                .AsNoTracking()
+                .ToListAsync();
+
+            return View(users);
         }
 
         public IActionResult Privacy()
