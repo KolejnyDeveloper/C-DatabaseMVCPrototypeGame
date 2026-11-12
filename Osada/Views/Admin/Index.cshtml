@@ -1,8 +1,13 @@
-﻿@{
+﻿@using Osada.Models
+
+@{
     ViewData["Title"] = "Panel administratora";
+
+    var villages = ViewBag.Villages as IEnumerable<AdminVillageOverview>
+        ?? Enumerable.Empty<AdminVillageOverview>();
 }
 
-<div class="container mt-4">
+<div class="container-fluid mt-4">
     <h1>Panel administratora</h1>
 
     <p class="text-muted">
@@ -10,7 +15,38 @@
     </p>
 
     <hr />
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h4>Zegar</h4>
 
+            <form asp-controller="Admin"
+                  asp-action="NewDay"
+                  method="post"
+                  onsubmit="return confirm('Nowy dzien?');">
+
+                @Html.AntiForgeryToken()
+
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-calendar-plus"></i>
+                    Nowy dzień
+                </button>
+            </form>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
     <div class="row">
         <div class="col-md-4 mb-3">
             <div class="card shadow-sm">
@@ -57,4 +93,117 @@
             </div>
         </div>
     </div>
+
+    <hr />
+
+    <h2 class="mb-3">Zestawienie wszystkich wiosek</h2>
+
+    <p class="text-muted">
+        Dane pobierane z widoku SQL: vw_AdminVillageOverview.
+        Liczba wiosek: @villages.Count()
+    </p>
+
+    @if (!villages.Any())
+    {
+        <div class="alert alert-info">
+            Brak wiosek do wyświetlenia.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover
+                align-middle text-center">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Wioska</th>
+                        <th>Współrzędne</th>
+                        <th>Punkty</th>
+                        <th>Właściciel</th>
+                        <th>Konto aktywne</th>
+
+                        <th>Drewno</th>
+                        <th>Glina</th>
+                        <th>Żelazo</th>
+                        <th>Żywność</th>
+
+                        <th>Produkcja drewna</th>
+                        <th>Produkcja gliny</th>
+                        <th>Produkcja żelaza</th>
+                        <th>Produkcja żywności</th>
+
+                        <th>Liczba budynków</th>
+                        <th>Poziomy budynków</th>
+
+                        <th>Jednostki</th>
+                        <th>Atak</th>
+                        <th>Obrona</th>
+
+                        <th>Ataki wysłane</th>
+                        <th>Ataki otrzymane</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var village in villages)
+                    {
+                        <tr>
+                            <td>@village.VillageId</td>
+
+                            <td>
+                                <strong>@village.VillageName</strong>
+                            </td>
+
+                            <td>
+                                @village.X : @village.Y
+                            </td>
+
+                            <td>@village.Points</td>
+
+                            <td>
+                                @(village.OwnerUsername ?? "Brak właściciela")
+                            </td>
+
+                            <td>
+                                @if (village.OwnerIsActive == true)
+                                {
+                                    <span class="text-success">Tak</span>
+                                }
+                                else if (village.OwnerIsActive == false)
+                                {
+                                    <span class="text-danger">Nie</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Brak danych</span>
+                                }
+                            </td>
+
+                            <td>@(village.WoodAmount?.ToString() ?? "—")</td>
+                            <td>@(village.ClayAmount?.ToString() ?? "—")</td>
+                            <td>@(village.IronAmount?.ToString() ?? "—")</td>
+                            <td>@(village.FoodAmount?.ToString() ?? "—")</td>
+
+                            <td>@(village.WoodProduction?.ToString() ?? "—")</td>
+                            <td>@(village.ClayProduction?.ToString() ?? "—")</td>
+                            <td>@(village.IronProduction?.ToString() ?? "—")</td>
+                            <td>@(village.FoodProduction?.ToString() ?? "—")</td>
+
+                            <td>@village.BuildingCount</td>
+                            <td>@village.TotalBuildingLevels</td>
+
+                            <td>@village.TotalUnits</td>
+                            <td>@village.TotalAttack</td>
+                            <td>@village.TotalDefense</td>
+
+                            <td>@village.AttacksLaunched</td>
+                            <td>@village.AttacksReceived</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
 </div>

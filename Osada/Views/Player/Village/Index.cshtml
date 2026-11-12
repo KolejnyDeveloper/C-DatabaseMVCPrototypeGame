@@ -1,0 +1,107 @@
+﻿@model Osada.Models.ViewModels.VillageDashboardViewModel
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="village-container">
+
+    <aside class="village-sidebar">
+
+        <div class="village-info">
+            <h2>𓈩 @Model.Name</h2>
+            <p>Koordynaty: @Model.X | @Model.Y</p>
+            <p>Punkty: @Model.Points</p>
+        </div>
+
+        <hr />
+
+        <nav class="village-navigation">
+
+            <a asp-action="Village"
+               asp-route-id="@Model.VillageId"
+               asp-route-section="TownHall"
+               class="village-link @(Model.Section == "TownHall" ? "active" : "")">
+                𓉪 Ratusz
+            </a>
+
+            <a asp-action="Village"
+               asp-route-id="@Model.VillageId"
+               asp-route-section="BuildPlan"
+               class="village-link @(Model.Section == "BuildPlan" ? "active" : "")">
+                𓀅 Plan budowy
+            </a>
+
+            @if (Model.HasBarracks)
+            {
+                <a asp-action="Village"
+                   asp-route-id="@Model.VillageId"
+                   asp-route-section="Barracks"
+                   class="village-link @(Model.Section == "Barracks" ? "active" : "")">
+                    𓁶 Baraki
+                </a>
+            }
+
+            <a asp-action="Village"
+               asp-route-id="@Model.VillageId"
+               asp-route-section="Map"
+               class="village-link @(Model.Section == "Map" ? "active" : "")">
+                𓌵 Mapa
+            </a>
+
+            <a asp-action="Village"
+               asp-route-id="@Model.VillageId"
+               asp-route-section="BattleHistory"
+               class="village-link @(Model.Section == "BattleHistory" ? "active" : "")">
+                𓏞 Historia walk
+            </a>
+
+        </nav>
+
+        <div class="village-back">
+
+            <a asp-action="Village"
+               asp-route-id="@Model.VillageId"
+               asp-route-section="Settings"
+               class="village-link @(Model.Section == "Settings" ? "active" : "")">
+                𓈔 Ustawienia wioski
+            </a>
+
+            <a asp-action="Index" class="village-link">
+                Panel ziem
+            </a>
+
+        </div>
+
+    </aside>
+
+    <main class="village-content">
+
+        @if (Model.Section == "TownHall")
+        {
+            <partial name="~/Views/Player/Village/_TownHall.cshtml" model="Model" />
+        }
+        else if (Model.Section == "BuildPlan")
+        {
+            <partial name="~/Views/Player/Village/_BuildPlan.cshtml" model="Model" />
+        }
+        else if (Model.Section == "Barracks")
+        {
+            <partial name="~/Views/Player/Village/_Barracks.cshtml" model="Model" />
+        }
+        else if (Model.Section == "Map")
+        {
+            <partial name="~/Views/Player/Village/_Map.cshtml" model="Model" />
+        }
+        else if (Model.Section == "BattleHistory")
+        {
+            <partial name="~/Views/Player/Village/_BattleHistory.cshtml" model="Model" />
+        }
+        else if (Model.Section == "Settings")
+        {
+            <partial name="~/Views/Player/Village/_Settings.cshtml" model="Model" />
+        }
+
+    </main>
+
+</div>

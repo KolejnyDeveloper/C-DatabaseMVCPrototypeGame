@@ -79,8 +79,32 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGxheWVyXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Jakub/source/repos/Osada/Osada/Views/Player/Village.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGxheWVyXFZpbGxhZ2UuY3NodG1s
+[C:/Users/Jakub/source/repos/Osada/Osada/Views/Player/Village/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGxheWVyXFZpbGxhZ2VcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Jakub/source/repos/Osada/Osada/Views/Player/Village/_Barracks.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGxheWVyXFZpbGxhZ2VcX0JhcnJhY2tzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Jakub/source/repos/Osada/Osada/Views/Player/Village/_BattleHistory.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGxheWVyXFZpbGxhZ2VcX0JhdHRsZUhpc3RvcnkuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Jakub/source/repos/Osada/Osada/Views/Player/Village/_BuildPlan.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGxheWVyXFZpbGxhZ2VcX0J1aWxkUGxhbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Jakub/source/repos/Osada/Osada/Views/Player/Village/_Map.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGxheWVyXFZpbGxhZ2VcX01hcC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Jakub/source/repos/Osada/Osada/Views/Player/Village/_Settings.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGxheWVyXFZpbGxhZ2VcX1NldHRpbmdzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Jakub/source/repos/Osada/Osada/Views/Player/Village/_TownHall.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGxheWVyXFZpbGxhZ2VcX1Rvd25IYWxsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Jakub/source/repos/Osada/Osada/Views/Shared/AccessDenied.cshtml]

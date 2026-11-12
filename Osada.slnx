@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="Osada.Tests/Osada.Tests.csproj" Id="25a9e268-5e52-40f7-b608-1438c1021bf8" />
   <Project Path="Osada/Osada.csproj" />
 </Solution>

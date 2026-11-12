@@ -12,6 +12,7 @@ public partial class ApplicationDbContext : DbContext
     {
     }
 
+    public virtual DbSet<AdminVillageOverview> AdminVillageOverviews { get; set; }
     public virtual DbSet<Attack> Attacks { get; set; }
 
     public virtual DbSet<BuildingType> BuildingTypes { get; set; }
@@ -136,7 +137,23 @@ public partial class ApplicationDbContext : DbContext
         });
 
         OnModelCreatingPartial(modelBuilder);
+        modelBuilder.Entity<VillageResource>()
+    .ToTable(tb => tb.HasTrigger("trg_ResourceTransactions"));
+
+        modelBuilder.Entity<AdminVillageOverview>(entity =>
+        {
+            entity.HasNoKey();
+
+            entity.ToView("vw_AdminVillageOverview");
+
+            entity.Property(e => e.VillageName)
+                .HasMaxLength(100);
+
+            entity.Property(e => e.OwnerUsername)
+                .HasMaxLength(100);
+        });
     }
+
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

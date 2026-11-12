@@ -1,0 +1,64 @@
+﻿@model Osada.Models.ViewModels.CreateVillageViewModel
+
+@{
+    ViewData["Title"] = "Tworzenie wioski";
+}
+
+<div class="container mt-5" style="max-width: 600px;">
+
+    <h1>𓆿𓆿 Załóż nową wioskę 𓆿𓆿</h1>
+
+    <p class="text-muted">
+        Witaj mości panie, jak się zowie twa włość:
+    </p>
+
+    <hr />
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+    <form asp-controller="Player"
+          asp-action="CreateVillage"
+          method="post">
+
+        @Html.AntiForgeryToken()
+
+        <div asp-validation-summary="ModelOnly"
+             class="text-danger mb-3">
+        </div>
+
+        <div class="mb-4">
+
+            <label asp-for="Name" class="form-label">
+                Nazwa wioski
+            </label>
+
+            <input asp-for="Name"
+                   class="form-control"
+                   placeholder="Np. Zielona Dolina"
+                   maxlength="50"
+                   autofocus />
+
+            <span asp-validation-for="Name"
+                  class="text-danger">
+            </span>
+
+        </div>
+
+        <button type="submit" class="btn btn-success w-100">
+            Nowa osada
+        </button>
+
+        <a asp-controller="Player"
+           asp-action="Index"
+           class="btn btn-outline-secondary w-100 mt-2">
+            Wróć
+        </a>
+
+    </form>
+
+</div>

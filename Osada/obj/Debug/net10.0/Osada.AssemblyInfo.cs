@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Osada")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+64dc9aab99b5279a659fc05a95266d33b24a213b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8c60a0258b4a5242e4d0f94a48a2844aaad44232")]
 [assembly: System.Reflection.AssemblyProductAttribute("Osada")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Osada")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

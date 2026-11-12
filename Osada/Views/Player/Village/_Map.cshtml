@@ -1,0 +1,231 @@
+﻿@model Osada.Models.ViewModels.VillageDashboardViewModel
+
+<h1>𓌵 Mapa świata</h1>
+
+<p class="section-description">
+    Przeglądaj wioski i transportuj między nimi surowce.
+</p>
+
+<hr />
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+<h3>Twoje zasoby</h3>
+
+<div class="row g-2 mb-4">
+
+    <div class="col-6 col-md-3">
+        <div class="resource-card">
+            <strong>𓆱 Drewno</strong>
+            <h4>@Model.WoodAmount</h4>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <div class="resource-card">
+            <strong>𓈑 Glina</strong>
+            <h4>@Model.ClayAmount</h4>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <div class="resource-card">
+            <strong>𓈔 Żelazo</strong>
+            <h4>@Model.IronAmount</h4>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <div class="resource-card">
+            <strong>𓇣 Żywność</strong>
+            <h4>@Model.FoodAmount</h4>
+        </div>
+    </div>
+
+</div>
+
+<h3 class="section-heading">Lista wiosek</h3>
+
+@if (Model.WorldMap.Villages == null ||
+     !Model.WorldMap.Villages.Any())
+{
+    <div class="alert alert-info">
+        Nie znaleziono żadnych wiosek.
+    </div>
+}
+else
+{
+    <div class="row g-3">
+
+        @foreach (var village in Model.WorldMap.Villages)
+        {
+            <div class="col-md-6 col-xl-4">
+
+                <div class="building-card">
+
+                    <div class="d-flex justify-content-between
+                        align-items-start">
+
+                        <h5>@village.Name</h5>
+
+                        @if (village.IsOwnedByCurrentPlayer)
+                        {
+                            <span class="badge bg-success">
+                                Twoja wioska
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">
+                                Obca wioska
+                            </span>
+                        }
+
+                    </div>
+
+                    <hr />
+
+                    <p>
+                        Właściciel:
+                        <strong>@village.OwnerName</strong>
+                    </p>
+
+                    <p>
+                        Współrzędne:
+                        <strong>
+                            (@village.X | @village.Y)
+                        </strong>
+                    </p>
+
+                    <p>
+                        Punkty:
+                        <strong>@village.Points</strong>
+                    </p>
+
+                    @if (village.IsOwnedByCurrentPlayer &&
+                         village.VillageId == Model.VillageId)
+                    {
+                        <div class="alert alert-info">
+                            To jest aktualnie otwarta wioska.
+                        </div>
+                    }
+                    else
+                    {
+                        <hr />
+
+                        <h6>𓆱 Transport surowców</h6>
+
+                        <form asp-controller="Player"
+                              asp-action="TransportResources"
+                              method="post">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="SourceVillageId"
+                                   value="@Model.VillageId" />
+
+                            <input type="hidden"
+                                   name="DestinationVillageId"
+                                   value="@village.VillageId" />
+
+                           
+                            <div class="row g-2 mb-3">
+
+                                <div class="col-3">
+                                    <label class="form-label text-center w-100"
+                                           title="Drewno">
+                                        𓆱
+                                    </label>
+
+                                    <input type="number"
+                                           name="Wood"
+                                           class="form-control form-control-sm"
+                                           min="0"
+                                           max="@Model.WoodAmount"
+                                           value="0" />
+                                </div>
+
+                                <div class="col-3">
+                                    <label class="form-label text-center w-100"
+                                           title="Glina">
+                                        𓈑
+                                    </label>
+
+                                    <input type="number"
+                                           name="Clay"
+                                           class="form-control form-control-sm"
+                                           min="0"
+                                           max="@Model.ClayAmount"
+                                           value="0" />
+                                </div>
+
+                                <div class="col-3">
+                                    <label class="form-label text-center w-100"
+                                           title="Żelazo">
+                                        𓈔
+                                    </label>
+
+                                    <input type="number"
+                                           name="Iron"
+                                           class="form-control form-control-sm"
+                                           min="0"
+                                           max="@Model.IronAmount"
+                                           value="0" />
+                                </div>
+
+                                <div class="col-3">
+                                    <label class="form-label text-center w-100"
+                                           title="Żywność">
+                                        𓇣
+                                    </label>
+
+                                    <input type="number"
+                                           name="Food"
+                                           class="form-control form-control-sm"
+                                           min="0"
+                                           max="@Model.FoodAmount"
+                                           value="0" />
+                                </div>
+
+                            </div>
+
+
+                            <button type="submit"
+                                    class="btn btn-primary w-100">
+                                Wyślij transport
+                            </button>
+
+                        </form>
+                    }
+
+                    @if (village.IsOwnedByCurrentPlayer)
+                    {
+                        <a asp-controller="Player"
+                           asp-action="Village"
+                           asp-route-id="@village.VillageId"
+                           asp-route-section="TownHall"
+                           class="btn btn-outline-secondary w-100 mt-2">
+                            Otwórz wioskę
+                        </a>
+                    }
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+}

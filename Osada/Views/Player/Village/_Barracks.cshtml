@@ -1,0 +1,203 @@
+﻿@model Osada.Models.ViewModels.VillageDashboardViewModel
+
+<h1>𓁶 Baraki</h1>
+
+<p class="section-description">
+    Zarządzanie wojskiem wioski.
+</p>
+
+<hr />
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+<h3>Twoje jednostki</h3>
+
+@if (Model.Barracks.OwnedUnits == null ||
+     !Model.Barracks.OwnedUnits.Any())
+{
+    <div class="alert alert-info">
+        Nie posiadasz jeszcze żadnych jednostek.
+    </div>
+}
+else
+{
+    <div class="row g-3">
+
+        @foreach (var unit in Model.Barracks.OwnedUnits)
+        {
+            <div class="col-md-6 col-lg-4">
+                <div class="building-card">
+
+                    <h5>@unit.Name</h5>
+
+                    <h3>
+                        Ilość: @unit.Quantity
+                    </h3>
+
+                    <p>
+                        Atak: @unit.Attack
+                        <br />
+                        Obrona: @unit.Defense
+                    </p>
+
+                    <form asp-controller="Player"
+                          asp-action="RemoveUnit"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden"
+                               name="villageId"
+                               value="@Model.VillageId" />
+
+                        <input type="hidden"
+                               name="unitTypeId"
+                               value="@unit.UnitTypeId" />
+
+                        <button type="submit"
+                                class="btn btn-danger btn-sm"
+                                onclick="return confirm('Czy na pewno chcesz usunąć wszystkie jednostki tego typu?');">
+                            Usuń jednostki
+                        </button>
+
+                    </form>
+
+                </div>
+            </div>
+        }
+
+    </div>
+}
+
+<hr />
+
+<h3 class="section-heading">Dostępne zasoby</h3>
+
+<div class="row g-2 mb-4">
+
+    <div class="col-6 col-md-3">
+        <div class="resource-card">
+            <h6>𓆱 Drewno</h6>
+            <strong>@Model.Barracks.WoodAmount</strong>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <div class="resource-card">
+            <h6>𓈑 Glina</h6>
+            <strong>@Model.Barracks.ClayAmount</strong>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <div class="resource-card">
+            <h6>𓈔 Żelazo</h6>
+            <strong>@Model.Barracks.IronAmount</strong>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <div class="resource-card">
+            <h6>𓇣 Żywność</h6>
+            <strong>@Model.Barracks.FoodAmount</strong>
+        </div>
+    </div>
+
+</div>
+
+<h3 class="section-heading">Rekrutacja jednostek</h3>
+
+@if (Model.Barracks.RecruitableUnits == null ||
+     !Model.Barracks.RecruitableUnits.Any())
+{
+    <div class="alert alert-info">
+        Brak dostępnych typów jednostek.
+    </div>
+}
+else
+{
+    <div class="row g-3">
+
+        @foreach (var unit in Model.Barracks.RecruitableUnits)
+        {
+            <div class="col-md-6 col-lg-4">
+
+                <div class="building-card">
+
+                    <h5>@unit.Name</h5>
+
+                    <p>
+                        Atak: @unit.Attack
+                        <br />
+                        Obrona: @unit.Defense
+                    </p>
+
+                    <hr />
+
+                    <h6>Koszt jednej jednostki</h6>
+
+                    <p>
+                        𓆱 Drewno:
+                        @unit.RecruitmentCostWood
+                        <br />
+
+                        𓈑 Glina:
+                        @unit.RecruitmentCostClay
+                        <br />
+
+                        𓈔 Żelazo:
+                        @unit.RecruitmentCostIron
+                    </p>
+
+                    <form asp-controller="Player"
+                          asp-action="RecruitUnit"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden"
+                               name="villageId"
+                               value="@Model.VillageId" />
+
+                        <input type="hidden"
+                               name="unitTypeId"
+                               value="@unit.UnitTypeId" />
+
+                        <label class="form-label">
+                            Liczba jednostek
+                        </label>
+
+                        <input type="number"
+                               name="quantity"
+                               class="form-control mb-3"
+                               min="1"
+                               max="100000"
+                               value="1"
+                               required />
+
+                        <button type="submit"
+                                class="btn btn-primary w-100">
+                            Rekrutuj
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+}

@@ -1,0 +1,151 @@
+﻿@model Osada.Models.ViewModels.VillageDashboardViewModel
+
+<h1>𓀅 Plan budowy</h1>
+<blockquote><i>Ściągnij jak najwięcej robotników i zrób fundamenty o tam. A tam, koło tej palmy, będzie wielka aleja z mnóstwem posągów! Aleja imienia Mnóstwa Posągów! A tam – ogrody. No wiesz, figowce, bananowce, daktylowce, wierzby płaczące, brzoza… A tam – pałac! Ogromny, przestronny, taka chata! I dziedziniec pełen tancerek i wszystkie będą robić taaak! A tutaj… malutkie geranium. Tak. Pełen wypas. Wypas po pachy. Odrobinę wyobraźni!</i></blockquote>
+
+<p class="section-description">
+    Zarządzanie budynkami wioski.
+</p>
+
+<hr />
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+<h3>Dostępne zasoby</h3>
+
+<div class="row g-2 mb-4">
+
+    <div class="col-6 col-md-3">
+        <div class="resource-card">
+            <h6>𓆱 Drewno</h6>
+            <strong>@Model.BuildPlan.WoodAmount</strong>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <div class="resource-card">
+            <h6>𓈑 Glina</h6>
+            <strong>@Model.BuildPlan.ClayAmount</strong>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <div class="resource-card">
+            <h6>𓈔 Żelazo</h6>
+            <strong>@Model.BuildPlan.IronAmount</strong>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <div class="resource-card">
+            <h6>𓇣 Żywność</h6>
+            <strong>@Model.BuildPlan.FoodAmount</strong>
+        </div>
+    </div>
+
+</div>
+
+<hr />
+
+<h3 class="section-heading">Budynki wioski</h3>
+
+@if (Model.BuildPlan.Buildings == null ||
+     !Model.BuildPlan.Buildings.Any())
+{
+    <div class="alert alert-info">
+        Brak dostępnych budynków.
+    </div>
+}
+else
+{
+    <div class="row g-3">
+
+        @foreach (var building in Model.BuildPlan.Buildings)
+        {
+            <div class="col-md-6 col-lg-4">
+
+                <div class="building-card">
+
+                    <h5>@building.Name</h5>
+
+                    @if (building.IsBuilt)
+                    {
+                        <span class="badge bg-success">
+                            Poziom @building.CurrentLevel
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">
+                            Nie wybudowano
+                        </span>
+                    }
+
+                    <hr />
+
+                    <h6>
+                        @(building.IsBuilt
+                            ? "Koszt ulepszenia"
+                            : "Koszt budowy")
+                    </h6>
+
+                    <p>
+                        𓆱 Drewno:
+                        @building.CostWood
+                        <br />
+
+                        𓈑 Glina:
+                        @building.CostClay
+                        <br />
+
+                        𓈔 Żelazo:
+                        @building.CostIron
+                    </p>
+
+                    <p>
+                        Następny poziom:
+                        <strong>@building.NextLevel</strong>
+                    </p>
+
+                    <form asp-controller="Player"
+                          asp-action="UpgradeBuilding"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden"
+                               name="villageId"
+                               value="@Model.VillageId" />
+
+                        <input type="hidden"
+                               name="buildingTypeId"
+                               value="@building.BuildingTypeId" />
+
+                        <button type="submit"
+                                class="btn btn-primary w-100">
+                            @(building.IsBuilt
+                                ? "Ulepsz budynek"
+                                : "Wybuduj")
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+}

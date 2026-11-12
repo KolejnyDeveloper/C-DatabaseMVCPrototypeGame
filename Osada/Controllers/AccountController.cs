@@ -15,12 +15,16 @@ public class AccountController : Controller
 {
     private readonly ApplicationDbContext _context;
     private readonly PasswordHasher<User> _passwordHasher;
+    private readonly ILogger<AccountController> _logger;
 
-    public AccountController(ApplicationDbContext context)
-    {
-        _context = context;
-        _passwordHasher = new PasswordHasher<User>();
-    }
+public AccountController(
+    ApplicationDbContext context,
+    ILogger<AccountController> logger)
+{
+    _context = context;
+    _logger = logger;
+    _passwordHasher = new PasswordHasher<User>();
+}
 
     [HttpGet]
     public IActionResult Register()
@@ -106,14 +110,36 @@ public class AccountController : Controller
     public async Task<IActionResult> Login(LoginViewModel model)
     {
         if (!ModelState.IsValid)
+        {
+            _logger.LogWarning(
+                "Nieudana próba logowania - niepoprawne dane formularza.");
+
             return View(model);
+        }
 
         var user = await _context.Users
             .Include(u => u.Roles)
             .SingleOrDefaultAsync(u => u.Username == model.Username.Trim());
 
-        if (user == null || !user.IsActive)
+        if (user == null)
         {
+            _logger.LogWarning(
+                "Nieudana próba logowania. Nie znaleziono użytkownika: {Username}",
+                model.Username.Trim());
+
+            ModelState.AddModelError(
+                string.Empty,
+                "Masz bana");
+
+            return View(model);
+        }
+
+        if (!user.IsActive)
+        {
+            _logger.LogWarning(
+                "Nieudana próba logowania. Konto nieaktywne. Użytkownik: {Username}",
+                user.Username);
+
             ModelState.AddModelError(
                 string.Empty,
                 "Masz bana");
@@ -129,6 +155,10 @@ public class AccountController : Controller
 
         if (verificationResult == PasswordVerificationResult.Failed)
         {
+            _logger.LogWarning(
+                "Nieudana próba logowania. Nieprawidłowe hasło. Użytkownik: {Username}",
+                user.Username);
+
             ModelState.AddModelError(
                 string.Empty,
                 "Nieprawidłowa nazwa użytkownika lub hasło");
@@ -137,10 +167,10 @@ public class AccountController : Controller
         }
 
         var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-            new Claim(ClaimTypes.Name, user.Username)
-        };
+    {
+        new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+        new Claim(ClaimTypes.Name, user.Username)
+    };
 
         foreach (var role in user.Roles)
         {
@@ -164,6 +194,10 @@ public class AccountController : Controller
             }
         );
 
+        _logger.LogInformation(
+            "{Username} zalogowany",
+            user.Username);
+
         if (user.Roles.Any(r => r.Name == RoleNames.Admin))
         {
             return RedirectToAction("Index", "Admin");
@@ -176,6 +210,10 @@ public class AccountController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
     {
+        _logger.LogInformation(
+            "{Username} wylogowany",
+            User.Identity?.Name ?? "Nieznany użytkownik");
+
         await HttpContext.SignOutAsync(
             CookieAuthenticationDefaults.AuthenticationScheme
         );

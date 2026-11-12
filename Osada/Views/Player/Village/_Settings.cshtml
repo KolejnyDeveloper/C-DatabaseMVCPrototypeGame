@@ -1,0 +1,66 @@
+﻿@model Osada.Models.ViewModels.VillageDashboardViewModel
+
+<h1>𓈔 Ustawienia wioski</h1>
+
+<p class="section-description">
+    Zarządzaj nazwą i ustawieniami swojej wioski.
+</p>
+
+<hr />
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+<div class="settings-section">
+
+    <h4>Zmiana nazwy wioski</h4>
+
+    <p>
+        Aktualna nazwa:
+        <strong>@Model.Name</strong>
+    </p>
+
+    <form asp-controller="Player"
+          asp-action="RenameVillage"
+          method="post">
+
+        @Html.AntiForgeryToken()
+
+        <input type="hidden"
+               name="id"
+               value="@Model.VillageId" />
+
+        <div class="mb-3" style="max-width: 400px;">
+
+            <label class="form-label" for="newName">
+                Nowa nazwa
+            </label>
+
+            <input type="text"
+                   id="newName"
+                   name="newName"
+                   class="form-control"
+                   maxlength="50"
+                   required
+                   placeholder="Wpisz nową nazwę..." />
+
+        </div>
+
+        <button type="submit" class="btn btn-success">
+            Zapisz nazwę
+        </button>
+
+    </form>
+
+</div>
